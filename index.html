@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seojin | Spatial Designer</title>
+
+  <!-- LANDING ANIMATION switch (runs before the first paint).
+       The intro plays only when: motion is allowed AND the address has no #hash
+       (so links such as index.html#projects from the project pages skip it). -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasHash = window.location.hash.length > 1;
+      if (reduce || hasHash) return;
+      root.classList.add('is-landing');
+      /* Safety net: whatever happens, never keep the intro on screen forever */
+      setTimeout(function () { root.classList.remove('is-landing'); }, 20000);
+    })();
+  </script>
+
+  <!-- Google Fonts: Italiana -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ======================================================
+       LANDING ANIMATION OVERLAY (decorative, removed after the intro)
+       Hidden by default; shown only while <html> has .is-landing.
+       See the "LANDING ANIMATION" sections in style.css and script.js.
+       ====================================================== -->
+  <div class="landing" aria-hidden="true">
+    <div class="landing__logo">
+        <span class="landing__letter"><span class="landing__shift" data-side="left">
+          <span class="landing__glyph landing__glyph--sans">S</span><span class="landing__glyph landing__glyph--serif">S</span>
+        </span></span>
+        <span class="landing__letter"><span class="landing__shift" data-side="left">
+          <span class="landing__glyph landing__glyph--sans">E</span><span class="landing__glyph landing__glyph--serif">E</span>
+        </span></span>
+        <!-- The O is made of 2 layers (Pretendard / Italiana), 2 clipped
+             halves (left / right) and the opening that holds the project icons -->
+        <span class="landing__letter landing__letter--o">
+          <span class="landing__glyph landing__glyph--sans">O</span><span class="landing__glyph landing__glyph--serif">O</span>
+          <span class="landing__o-half landing__o-half--left">O</span><span class="landing__o-half landing__o-half--right">O</span>
+          <span class="landing__opening">
+            <img class="landing__icon" src="images/cells.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/po_ong!.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/resonance.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/trace-of-protection.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/a-bite-of-wonderland.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/slosuloc.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/ttoreungi.png" alt="" decoding="async">
+            <img class="landing__icon" src="images/royal-respect.png" alt="" decoding="async">
+          </span>
+        </span>
+        <span class="landing__letter"><span class="landing__shift" data-side="right">
+          <span class="landing__glyph landing__glyph--sans">J</span><span class="landing__glyph landing__glyph--serif">J</span>
+        </span></span>
+        <span class="landing__letter"><span class="landing__shift" data-side="right">
+          <span class="landing__glyph landing__glyph--sans">I</span><span class="landing__glyph landing__glyph--serif">I</span>
+        </span></span>
+        <span class="landing__letter"><span class="landing__shift" data-side="right">
+          <span class="landing__glyph landing__glyph--sans">N</span><span class="landing__glyph landing__glyph--serif">N</span>
+        </span></span>
+    </div>
+  </div>
+
+
+  <!-- ======================================================
+       HEADER (fixed: stays visible while scrolling)
+       ====================================================== -->
+  <header class="site-header">
+
+    <!-- Top left label -->
+    <p class="role"><a href="#" aria-label="Back to home"><img class="header-mark" src="images/header-mark.png" alt="Seojin logo"></a></p>
+
+    <!-- Top right navigation (click-to-toggle, no JavaScript) -->
+    <nav class="menu" aria-label="Main navigation">
+      <input type="checkbox" id="menu-toggle" class="menu__checkbox">
+      <label for="menu-toggle" class="menu__label"><span class="menu__label--open">Menu</span><span class="menu__label--close">Close</span></label>
+
+      <ul class="menu__list">
+        <!-- Both links scroll to sections on this same page -->
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#projects">Projects</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main>
+
+    <!-- ======================================================
+         SECTION 1: MAIN PAGE (center logo)
+         ====================================================== -->
+<div class="cover-composition">
+
+      <!-- Left phrase: the real text is the outlined layer; the second span is
+           the black FILL layer (same text, same position) that the animation
+           reveals through a gradient mask. aria-hidden: read once by screen readers. -->
+      <p class="cover-side cover-side--left">
+        Where story
+        <span class="cover-side__fill" aria-hidden="true">Where story</span>
+      </p>
+
+      <div class="cover-logo">
+        <section class="hero" id="home" aria-label="Introduction">
+          <h1 class="logo">Seojin</h1>
+        </section>
+      </div>
+
+      <!-- Right phrase (same two layers) -->
+      <p class="cover-side cover-side--right">
+        takes shape
+        <span class="cover-side__fill" aria-hidden="true">takes shape</span>
+      </p>
+
+    </div>
+
+    <!-- ======================================================
+         SECTION 2: ABOUT ME
+         ====================================================== -->
+    <section class="about" id="about" aria-label="About Me">
+      <div class="about__inner">
+
+        <!-- Left column: portrait (put your photo at images/portrait.png) -->
+        <figure class="about__portrait">
+          <img src="images/portrait.png" alt="Portrait of Seojin Park">
+        </figure>
+
+        <!-- Right column: three information boxes with diamonds -->
+        <div class="about__list">
+
+          <!-- Box 1 -->
+          <article class="info">
+            <div class="info__box" tabindex="0">
+              <p>
+                <span class="info__name">Seojin Park</span>
+                is a spatial design student at Hongik University and currently an exchange student at HSLU. She starts with a concept or a story and translates it into a spatial experience through her own interpretation.
+              </p>
+            </div>
+            <svg class="info__diamond" viewBox="0 0 46 54" aria-hidden="true" focusable="false">
+              <path d="M23 1 C25 18 29 25 45 27 C29 29 25 36 23 53 C21 36 17 29 1 27 C17 25 21 18 23 1 Z"/>
+            </svg>
+          </article>
+
+          <!-- Box 2 -->
+          <article class="info">
+            <div class="info__box" tabindex="0">
+              <p>
+                Rather than following one fixed style, she looks for the spatial language that best expresses each story or identity. Her goal is to create spaces that communicate visually, evoke emotion, and leave a lasting impression.
+              </p>
+            </div>
+            <svg class="info__diamond" viewBox="0 0 46 54" aria-hidden="true" focusable="false">
+              <path d="M23 1 C25 18 29 25 45 27 C29 29 25 36 23 53 C21 36 17 29 1 27 C17 25 21 18 23 1 Z"/>
+            </svg>
+          </article>
+
+          <!-- Box 3 -->
+          <article class="info">
+            <div class="info__box" tabindex="0">
+              <p>
+                Her work focuses on building a distinct world and atmosphere for each project. Through form, material, light, color, and visual composition, she explores how the identity of a concept can become a physical and visual environment.
+              </p>
+            </div>
+            <svg class="info__diamond" viewBox="0 0 46 54" aria-hidden="true" focusable="false">
+              <path d="M23 1 C25 18 29 25 45 27 C29 29 25 36 23 53 C21 36 17 29 1 27 C17 25 21 18 23 1 Z"/>
+            </svg>
+          </article>
+
+        <!-- ========== ABOUT: EDUCATION / CONTACT OVERLAY ========== -->
+
+<div class="about-extra" id="about-extra" aria-live="polite">
+
+  <!-- Education -->
+  <section class="about-extra__panel" id="education-panel"
+           aria-label="Education" hidden>
+
+    <h3 class="about-extra__title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M2 9 12 4l10 5-10 5L2 9Z"/>
+        <path d="M6 11v6c3.5 3 8.5 3 12 0v-6"/>
+        <path d="M22 9v8"/>
+      </svg>
+      <span>Education</span>
+    </h3>
+
+    <div class="about-extra__content">
+      <div class="about-extra__group">
+        <p class="about-extra__label">HOME INSTITUTION</p>
+        <p class="about-extra__primary">
+  <a href="https://www.hongik.ac.kr/" target="_blank" rel="noopener noreferrer">
+    Hongik University College of Fine Arts
+  </a>
+</p>
+        <p class="about-extra__detail">Major in Industrial Design</p>
+        <p class="about-extra__detail">Specialization in Spatial Design</p>
+      </div>
+
+      <div class="about-extra__group">
+        <p class="about-extra__label">EXCHANGE INSTITUTION</p>
+        <p class="about-extra__primary">
+  <a href="https://www.hslu.ch/en/" target="_blank" rel="noopener noreferrer">
+    Lucerne University of Applied Sciences and Arts (HSLU)
+  </a>
+</p>
+        <p class="about-extra__detail">Major in Spatial Design</p>
+        <p class="about-extra__detail">Exchange Semester · Fall 2026–2027</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="about-extra__panel" id="contact-panel"
+           aria-label="Contact" hidden>
+
+    <h3 class="about-extra__title">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2" y="5" width="20" height="14" rx="1"/>
+        <path d="m2 7 10 7 10-7"/>
+      </svg>
+      <span>Contact</span>
+    </h3>
+
+    <div class="about-extra__content about-extra__content--contact">
+      <div class="about-extra__group">
+        <p class="about-extra__label">E-MAIL</p>
+        <a class="about-extra__link" href="mailto:psjcapba0123@gmail.com">
+          psjcapba0123@gmail.com
+        </a>
+      </div>
+
+      <div class="about-extra__group">
+        <p class="about-extra__label">CELL</p>
+        <a class="about-extra__link" href="tel:+821025175110">
+          +82 10-2517-5110
+        </a>
+      </div>
+
+      <div class="about-extra__group">
+        <p class="about-extra__label">INSTAGRAM</p>
+        <a class="about-extra__link"
+           href="https://www.instagram.com/seojini.p/"
+           target="_blank" rel="noopener noreferrer">
+          @seojini.p
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Circular buttons -->
+<div class="about-extra__buttons">
+
+  <button class="about-extra__button"
+          type="button"
+          data-about-panel="education"
+          aria-label="Show Education"
+          aria-controls="education-panel"
+          aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M2 9 12 4l10 5-10 5L2 9Z"/>
+      <path d="M6 11v6c3.5 3 8.5 3 12 0v-6"/>
+      <path d="M22 9v8"/>
+    </svg>
+  </button>
+
+  <button class="about-extra__button"
+          type="button"
+          data-about-panel="contact"
+          aria-label="Show Contact"
+          aria-controls="contact-panel"
+          aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="5" width="20" height="14" rx="1"/>
+      <path d="m2 7 10 7 10-7"/>
+    </svg>
+  </button>
+
+</div>
+<!-- ========== END ABOUT OVERLAY ========== -->
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SECTION 3: PROJECTS INDEX
+         ====================================================== -->
+    <section class="projects" id="projects" aria-label="Projects Index">
+
+      <!-- Heading with curved arrow -->
+      <div class="projects__intro">
+
+        <!-- Decorative arrow: dashed first half, solid second half, star tip.
+             The two masks are "reveal" paths: script/CSS animate them so the
+             real arrow is exposed progressively from left to right. -->
+        <svg class="projects__arrow" viewBox="123 100 762 125" aria-hidden="true" focusable="false">
+          <defs>
+            <mask id="mask-dashed" maskUnits="userSpaceOnUse" x="0" y="0" width="1100" height="320">
+              <path class="arrow__reveal arrow__reveal--dashed" pathLength="1" d="M153 190 C158 135 280 91 430 91"/>
+            </mask>
+            <mask id="mask-solid" maskUnits="userSpaceOnUse" x="0" y="0" width="1100" height="320">
+              <path class="arrow__reveal arrow__reveal--solid" pathLength="1" d="M430 91 C590 91 715 130 715 191"/>
+            </mask>
+          </defs>
+
+          <path class="arrow__dashed" mask="url(#mask-dashed)" d="M153 190 C158 135 280 91 430 91"/>
+          <path class="arrow__solid"  mask="url(#mask-solid)"  d="M430 91 C590 91 715 130 715 191"/>
+          <!-- Tip is drawn around (0,0); the <g> moves it onto the 2nd W's vertex -->
+          <g class="arrow__tip-pos" transform="translate(715 191)">
+            <path class="arrow__tip" d="M0 -5 C0.6 -1.5 1.5 -0.6 5 0 C1.5 0.6 0.6 1.5 0 5 C-0.6 1.5 -1.5 0.6 -5 0 C-1.5 -0.6 -0.6 -1.5 0 -5 Z"/>
+          </g>
+        </svg>
+
+        <!-- Italiana = decorative serif, Pretendard = clean sans.
+             Everything is wrapped in ONE inner span so the flex centering
+             treats the whole phrase as a single block. -->
+        <h2 class="projects__heading" aria-label="Welcome to my World">
+          <span class="projects__heading-line">
+            <span class="serif w-start" aria-hidden="true">W</span><span class="sans" aria-hidden="true">elcome to</span>
+            <span class="serif" aria-hidden="true">my</span>
+            <span class="sans w-end" aria-hidden="true">W</span><span class="serif" aria-hidden="true">orld</span><i class="baseline-probe" aria-hidden="true"></i>
+          </span>
+        </h2>
+      </div>
+
+      <!-- Project list: each row is one big link / hover area -->
+      <ol class="project-list">
+
+          <!-- Project 01 -->
+          <li>
+            <a class="project" href="cells.html" style="--icon-w: 16.5vw;">
+              <span class="project__top">
+                <span class="project__tag">Theraphy</span>
+                <span class="project__year">2024</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">01</span>
+                <span class="project__name">CELLS</span>
+              </h3>
+              <span class="project__info">Major Club<br>Summer Exhibition</span>
+              <img class="project__icon" src="images/cells.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 02 -->
+          <li>
+            <a class="project" href="po-ong.html" style="--icon-w: 16.5vw;">
+              <span class="project__top">
+                <span class="project__tag">Hug</span>
+                <span class="project__year">2025</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">02</span>
+                <span class="project__name">Po_ong!</span>
+              </h3>
+              <span class="project__info">Major Class Project<br>GWANGJU DESIGN BIENALE<br>2023 Entry</span>
+              <img class="project__icon" src="images/po_ong!.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 03 -->
+          <li>
+            <a class="project" href="resonance.html" style="--icon-w: 9vw;">
+              <span class="project__top">
+                <span class="project__tag">Resonance</span>
+                <span class="project__year">2025</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">03</span>
+                <span class="project__name">Resonance</span>
+              </h3>
+              <span class="project__info">Major Class Project<br>GWANGJU DESIGN BIENALE<br>2023 Entry</span>
+              <img class="project__icon" src="images/resonance.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 04 -->
+          <li>
+            <a class="project" href="trace-of-protection.html" style="--icon-w: 17vw;">
+              <span class="project__top">
+                <span class="project__tag">Intrusive Game</span>
+                <span class="project__year">2025</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">04</span>
+                <span class="project__name">Trace of Protection</span>
+              </h3>
+              <span class="project__info">Major Class Project<br>KISD Dedign Contest<br>Special Mention</span>
+              <img class="project__icon" src="images/trace-of-protection.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 05 -->
+          <li>
+            <a class="project" href="a-bite-of-wonderland.html" style="--icon-w: 16.5vw;">
+              <span class="project__top">
+                <span class="project__tag">A World of Imagination</span>
+                <span class="project__year">2025</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">05</span>
+                <span class="project__name">A bite of Wonderland</span>
+              </h3>
+              <span class="project__info">Major Club<br>Summer Exhibition</span>
+              <img class="project__icon" src="images/a-bite-of-wonderland.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 06 -->
+          <li>
+            <a class="project" href="slosuloc.html" style="--icon-w: 16.5vw;">
+              <span class="project__top">
+                <span class="project__tag">Slow</span>
+                <span class="project__year">2025</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">06</span>
+                <span class="project__name">SLOSULOC</span>
+              </h3>
+              <span class="project__info">KVMD Design Contest<br>Honorable Mention</span>
+              <img class="project__icon" src="images/slosuloc.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 07 -->
+          <li>
+            <a class="project" href="ttoreungi.html" style="--icon-w: 26vw;">
+              <span class="project__top">
+                <span class="project__tag">RE: generation</span>
+                <span class="project__year">2026</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">07</span>
+                <span class="project__name">ttoreungi</span>
+              </h3>
+              <span class="project__info">Major Class Project</span>
+              <img class="project__icon" src="images/ttoreungi.png" alt="" decoding="async">
+            </a>
+          </li>
+
+          <!-- Project 08 -->
+          <li>
+            <a class="project" href="royal-respect.html" style="--icon-w: 11.5vw;">
+              <span class="project__top">
+                <span class="project__tag">Respect</span>
+                <span class="project__year">2026</span>
+              </span>
+              <h3 class="project__title">
+                <span class="project__num">08</span>
+                <span class="project__name">Royal Respect</span>
+              </h3>
+              <span class="project__info">Design Contest</span>
+              <img class="project__icon" src="images/royal-respect.png" alt="" decoding="async">
+            </a>
+          </li>
+
+      </ol>
+
+    </section>
+
+  </main>
+
+  <!-- Portfolio footer: navigation, contact and brand -->
+  <footer class="portfolio-footer" id="footer" aria-label="Footer">
+    <!-- Erode the logo alpha slightly to create a genuinely thinner outline. -->
+    <svg class="portfolio-footer__filters" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="footer-logo-thin" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+        <feMorphology in="SourceAlpha" operator="erode" radius="0.65" result="thin"/>
+        <feFlood flood-color="#111" result="ink"/>
+        <feComposite in="ink" in2="thin" operator="in"/>
+      </filter>
+    </svg>
+    <div class="portfolio-footer__grid">
+      <div class="portfolio-footer__brand">
+        <a href="#" class="portfolio-footer__home" aria-label="Back to top"><img src="images/footer-logo.png" alt="Seojin logo"></a>
+        <div class="portfolio-footer__name">Seojin Park</div>
+        <div class="portfolio-footer__discipline">Industrial Design | Spatial Design</div>
+      </div>
+      <nav class="portfolio-footer__nav" aria-label="Footer navigation">
+        <div class="portfolio-footer__navcol">
+          <a href="#" data-footer-home>HOME</a>
+          <a href="#about">ABOUT ME</a>
+          <a href="#projects">PROJECT</a>
+          <svg class="portfolio-footer__diamond portfolio-footer__diamond--outline" viewBox="0 0 46 54" aria-hidden="true"><path d="M23 1 C25 18 29 25 45 27 C29 29 25 36 23 53 C21 36 17 29 1 27 C17 25 21 18 23 1 Z"/></svg>
+        </div>
+        <div class="portfolio-footer__navcol">
+          <a href="#about" data-footer-panel="education">EDUCATION</a>
+          <a href="#about" data-footer-panel="contact">CONTACT</a>
+        </div>
+      </nav>
+      <div class="portfolio-footer__contact">
+        <a href="mailto:psjcapba0123@gmail.com">psjcapba0123@gmail.com</a>
+        <a href="tel:+821025175110">+82 10 - 2517 - 5110</a>
+        <a href="https://www.instagram.com/seojini.p/" target="_blank" rel="noopener noreferrer">@seojini.p</a>
+        <svg class="portfolio-footer__diamond portfolio-footer__diamond--filled" viewBox="0 0 46 54" aria-hidden="true"><path d="M23 1 C25 18 29 25 45 27 C29 29 25 36 23 53 C21 36 17 29 1 27 C17 25 21 18 23 1 Z"/></svg>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Cursor-following project icons -->
+  <script src="script.js" defer></script>
+
+</body>
+</html>

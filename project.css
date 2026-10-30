@@ -1,0 +1,441 @@
+/* ==========================================================
+   PROJECT DETAIL PAGE  (shared by all eight project pages)
+   Loaded AFTER style.css, which provides the base reset, the
+   fixed header and the MENU dropdown.
+   All sizes are in vw, measured from the Figma frame, so the
+   composition scales with the browser width.
+   Class names start with "pd-" (project detail) so they never
+   clash with the Projects Index classes in style.css.
+   ========================================================== */
+
+/* ---------- Settings you may want to tweak ---------- */
+.pd {
+  --pad-left: 2.1vw;            /* left margin of the info panel */
+  --pad-right: 1.56vw;          /* right margin of the page */
+  --info-pad-right: 6.8vw;      /* space between info panel and thumbnail column */
+
+  --title-size: 6.2vw;          /* size of "01 CELLS" */
+  --title-y: 8.5vw;          /* where the title sits at the top of the page */
+  --title-top: 4.6vw;           /* where the title sticks, below the fixed header */
+
+  /* Scroll distance after which the left panel is released
+     (= height of .pd-info minus height of .pd-panel).
+     Fallback value; project.js replaces it with the real measured px. */
+  --release-y: 71.5vw;
+
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 300;
+  color: #000000;
+  background: #FFFFFF;
+}
+
+/* ==========================================================
+   PAGE GRID
+   Row 1: left info column | right story column
+   Row 2: gallery (spans both columns)
+   ========================================================== */
+.pd-body {
+  position: relative;              /* anchor for the title layer */
+  display: grid;
+  grid-template-columns: 50fr 50fr;
+  grid-template-rows: auto auto;
+}
+
+/* ==========================================================
+   LEFT INFORMATION PANEL
+   .pd-info  = tall column, as high as the right column
+   .pd-panel = sticky box (top: 0) inside it
+   Stage 1: page loads, panel sits at its normal place.
+   Stage 2: the panel is pinned to the top of the screen from the
+            very first pixel of scrolling, so it does not move at all
+            while the right column scrolls past.
+   Stage 3: when .pd-info ends, the panel can't stick any longer
+            and scrolls up and away with it. That is the release.
+   ========================================================== */
+.pd-info {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+}
+
+.pd-panel {
+  position: sticky;
+  top: 0;
+  padding: clamp(90px, 10vh, 130px)
+           var(--info-pad-right)
+           0
+           var(--pad-left);
+}
+
+/* Small gray back link */
+.pd-back {
+  display: block;
+  font-size: clamp(11px, 1.1vw, 22px);
+  line-height: 1.54vw;
+  font-weight: 300;
+  color: #9A9A9A;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.pd-back:hover,
+.pd-back:focus-visible {
+  color: #000000;
+}
+
+/* ---------- Title ---------- */
+.pd-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: var(--title-size);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: #000000;
+}
+
+/* Last letter in Italiana, as in the Figma */
+.pd-title__accent {
+  font-family: 'Italiana', serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Empty space inside the panel where the title appears (title layer sits on top) */
+.pd-title-slot {
+  margin-top: 1.2vw;
+  height: var(--title-size);
+}
+
+/* Mobile-only copy of the title (hidden on desktop) */
+.pd-title--mobile {
+  display: none;
+}
+
+.pd-subtitle {
+  margin: 1.2vw 0 1.6vw;
+  font-size: clamp(13px, 1.33vw, 26px);
+  line-height: 1.4;
+  font-weight: 300;
+}
+
+/* Metadata between two thin divider lines */
+.pd-meta {
+  padding: 2.1vw 0 2.2vw;
+  border-top: 1px solid #BDBDBD;
+  border-bottom: 1px solid #BDBDBD;
+}
+
+.pd-meta__row {
+  display: flex;
+  gap: 0.35em;
+  font-size: clamp(11px, 1.1vw, 22px);
+  line-height: 2.34vw;
+  font-weight: 300;
+}
+
+.pd-meta dt { color: #999999; }
+.pd-meta dd { color: #000000; margin: 0; }
+
+/* Concept image (keeps its own aspect ratio) */
+.pd-concept {
+  margin: 1.8vw 0 0;
+  width: 22.3vw;
+}
+
+.pd-concept img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.pd-concept img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ==========================================================
+   RIGHT COLUMN: thumbnail + description (scrolls normally)
+   ========================================================== */
+.pd-story {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 4.3vw var(--pad-right) 9vw 0;
+}
+
+.pd-thumb {
+  margin: 0;
+}
+
+.pd-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pd-statement {
+  margin: 13.1vw 0 6.6vw;
+  font-size: clamp(15px, 1.85vw, 38px);
+  line-height: 1.62;
+  font-weight: 600;
+}
+
+/* "CELLS" at the start of the statement is Italiana */
+.pd-statement__accent {
+  font-family: 'Italiana', serif;
+  font-weight: 400;
+}
+
+.pd-description {
+  font-size: clamp(13px, 1.75vw, 36px);
+  line-height: 1.82;
+  font-weight: 300;
+  text-align: justify;
+}
+
+/* ==========================================================
+   TITLE LAYER — one continuous title for all three stages
+   Three nested boxes, all driven by position: sticky:
+
+   .pd-titlelayer  invisible, as tall as the WHOLE page body
+                   (intro + gallery), over the left half.
+   .pd-titlestage  sticky, top: 0. Its height is
+                   (page height - --release-y), so the browser
+                   keeps it pinned to the top of the screen for
+                   exactly --release-y pixels of scrolling, the same
+                   distance the left panel stays pinned. Then it is
+                   released and rises with the page, like the panel.
+   .pd-title       the title, sticky at --title-top. While the stage
+                   is pinned the title sits at --title-y (lower than
+                   --title-top), so it does not move. After the
+                   release it rises with the stage until it reaches
+                   --title-top, then it stays there through the whole
+                   gallery. Rising -> sticking is one smooth motion:
+                   there is no second title and nothing is swapped.
+   ========================================================== */
+.pd-titlelayer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  z-index: 3;                      /* above the gallery images */
+  pointer-events: none;            /* never blocks clicks */
+}
+
+.pd-titlestage {
+  position: sticky;
+  top: 0;
+  height: calc(100% - var(--release-y));
+  padding-top: var(--title-y);     /* title starts at its Figma position */
+}
+
+.pd-titlestage .pd-title {
+  position: sticky;
+  top: var(--title-top);
+  margin-left: 1.3vw;
+}
+
+/* ==========================================================
+   IMAGE GALLERY (row 2, full width)
+   ========================================================== */
+.pd-gallery {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  z-index: 1;
+  display: grid;
+  gap: 1.09vw;
+  padding: 11.2vw var(--pad-right) 1.56vw 1.56vw;   /* top space = room for the title */
+}
+
+.pd-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;                    /* width/height attributes keep the ratio */
+}
+
+.pd-gallery__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.09vw;
+}
+
+/* ==========================================================
+   MOBILE (below 768px)
+   Single column, nothing sticky except the fixed header
+   (no sticky title on mobile).
+   Order: back link, title, subtitle, metadata, concept image,
+   thumbnail, description, gallery.
+   ========================================================== */
+@media (max-width: 767px) {
+
+  .pd-body {
+    display: block;
+  }
+
+  .pd-titlelayer {
+    display: none;                 /* desktop title layer is not used on mobile */
+  }
+
+  .pd-panel {
+    position: static;
+    padding: 88px 18px 0;
+  }
+
+  .pd-back {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .pd-title-slot {
+    height: auto;
+    margin: 14px 0 0 -2px;
+  }
+
+  .pd-title--mobile {
+    display: block;                /* mobile title, in normal flow */
+    font-size: 15vw;
+  }
+
+  .pd-subtitle {
+    margin: 14px 0 20px;
+    font-size: 16px;
+  }
+
+  .pd-meta {
+    padding: 14px 0;
+  }
+
+  .pd-meta__row {
+    font-size: 13px;
+    line-height: 26px;
+  }
+
+  .pd-concept {
+    margin-top: 22px;
+    width: min(100%, 340px);
+  }
+
+  .pd-story {
+    padding: 28px 18px 40px;
+  }
+
+  .pd-statement {
+    margin: 36px 0 24px;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .pd-br {
+    display: none;                 /* let the statement wrap naturally */
+  }
+
+  .pd-description {
+    font-size: 14.5px;
+    line-height: 1.75;
+    text-align: left;
+  }
+
+  .pd-gallery {
+    padding: 0 18px 18px;
+    gap: 8px;
+  }
+
+  .pd-gallery__pair {
+    grid-template-columns: 1fr;    /* two-column row becomes one column */
+    gap: 8px;
+  }
+}
+
+/* Trace of Protection 전용 제목 크기 */
+.pd--trace {
+  --title-size: 4vw;
+}
+/* Mobile title adjustment ONLY for projects 04, 05 and 08.
+   Keep all other typography, desktop styles and galleries unchanged. */
+@media (max-width: 767px) {
+  .pd--trace:not(.pd--wonderland) .pd-title--mobile {
+    font-size: 9vw; /* 04 Trace of Protection */
+  }
+
+  .pd--wonderland .pd-title--mobile {
+    font-size: 8vw; /* 05 A BITE of Wonderland */
+  }
+
+  .pd--royal .pd-title--mobile {
+    font-size: 9vw; /* 08 Royal Respect */
+  }
+
+  .pd--trace .pd-title--mobile,
+  .pd--royal .pd-title--mobile {
+    white-space: normal;
+    overflow-wrap: normal;
+    line-height: 1.12;
+  }
+}
+
+/* 모든 프로젝트 상세페이지 — 모바일 글자 크기 */
+@media (max-width: 767px) {
+
+  /* 프로젝트 부제목 */
+  .pd-subtitle {
+    font-size: 14px;
+  }
+
+  /* Concept / Type / Year */
+  .pd-meta__row {
+    font-size: 11px;
+    line-height: 23px;
+  }
+
+  /* 프로젝트 설명 제목 */
+  .pd-statement {
+    font-size: 16px;
+  }
+
+  /* 프로젝트 본문 설명 */
+  .pd-description {
+    font-size: 13px;
+  }
+
+  /* < projects 돌아가기 버튼 */
+  .pd-back {
+    font-size: 11px;
+  }
+
+}
+
+/* 프로젝트 상세페이지 제목 — 배경색 반전 효과 */
+@media (min-width: 768px) {
+  .pd-titlelayer {
+    mix-blend-mode: difference;
+  }
+
+  .pd-titlestage .pd-title {
+    color: #ffffff;
+  }
+}
+
+/* Fixed header: same small symbol as the main page */
+.site-header .role .header-mark {
+  display: block;
+  width: 30px;
+  height: auto;
+}
+
+/* Mobile only: match main-page header logo size */
+@media (max-width: 767px) {
+  .site-header .role .header-mark {
+    width: 25px;
+    height: auto;
+  }
+}
+
+/* 모바일에서만 제목과 프로젝트 인덱스 사이 간격 확대 */
+@media screen and (max-width: 767px) {
+  section.projects .project-list {
+    margin-top: 100px !important;
+  }
+}
